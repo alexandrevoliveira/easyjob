@@ -23,14 +23,16 @@ export default function Home() {
         <VStack spacing="8">
           <Link href="/companies">
             <ChakraLink display="flex" _hover={{ color: 'purple.500' }}>
-              <Icon as={RiBuilding4Fill} fontSize="24" mt="1"/>
+              <Icon as={RiBuilding4Fill} fontSize="24" alignSelf="center" />
               <Text ml="4" fontWeight="medium" fontSize="24">Empresa</Text>
             </ChakraLink>
           </Link>
 
-          <Link href="/candidates">
+          {/* aqui irei redirecionar para a página de usuários, por enquanto que
+          não criamos a página de candidatos */}
+          <Link href="/users">
             <ChakraLink display="flex" _hover={{ color: 'purple.500' }}>
-              <Icon as={GoPerson} fontSize="24" mt="1"/>
+              <Icon as={GoPerson} fontSize="24" alignSelf="center" />
               <Text ml="4" fontWeight="medium" fontSize="24">Candidato</Text>
             </ChakraLink>
           </Link> 
