@@ -12,7 +12,7 @@ export function Logo() {
         w="64"
         _hover={{ 
           textDecoration: "none",
-          color: 'green.500'
+          color: 'pink.500'
         }}
       >
         EasyJob
