@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { queryClient } from '../services/queryClient'
 
 import { theme } from '../styles/theme'
+import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
 
 if (process.env.NODE_ENV === 'development') {
   makeServer()
@@ -15,7 +16,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <SidebarDrawerProvider>
+          <Component {...pageProps} />
+        </SidebarDrawerProvider>
       </ChakraProvider>
 
       <ReactQueryDevtools />
