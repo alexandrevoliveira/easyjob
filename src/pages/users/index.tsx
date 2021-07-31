@@ -66,7 +66,7 @@ export default function UserList() {
             </Flex>
           ) : (
             <>
-              <Table colorScheme="whiteAlpha">
+              <Table colorScheme="whiteAlpha" size="sm">
                 <Thead>
                   <Tr>
                     <Th px={["4", "4", "6"]} color="gray.300" width="8">

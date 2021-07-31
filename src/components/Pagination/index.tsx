@@ -43,7 +43,7 @@ export function Pagination({
         spacing="6"
       >
         <Box>
-          <strong>0</strong> - <strong>10</strong> de <strong>100</strong>
+          <strong>{(((currentPage - 1) * registersPerPage) + 1)}</strong> - <strong>{Math.min(currentPage * registersPerPage, totalCountOfRegisters)}</strong> de <strong>{totalCountOfRegisters}</strong>
         </Box>
         <Stack direction="row" spacing="2">
 
