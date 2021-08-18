@@ -15,15 +15,17 @@ import { Sidebar } from "../../components/Sidebar";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 
-interface CreateUserFormData {
+interface CreateCompanyFormData {
   name: string;
+  cnpj: string;
   email: string;
   password: string;
   password_confirmation: string;
 }
 
-const createUserFormSchema = yup.object().shape({
+const createCompanyFormSchema = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
+  cnpj: yup.string().required("CNPJ é um campo obrigatório para empresa").length(14),
   email: yup.string().required("Email obrigatório").email("E-mail inválido"),
   password: yup.string().required("Senha obrigatória")
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
@@ -32,34 +34,29 @@ const createUserFormSchema = yup.object().shape({
   ], "As senhas não batem")
 })
 
-export default function CreateUser() {
+export default function CreateCompany() {
   const router = useRouter()
 
-  const createUser = useMutation(async(user: CreateUserFormData) => {
-    const response = await api.post('users', {
-      user: {
-        ...user,
-        created_at: new Date(),
-      }
-    })
+  const createCompany = useMutation(async(company: CreateCompanyFormData) => {
+    const response = await api.post('companies', company)
 
-    return response.data.user
+    return response.data.company
   }, {
     onSuccess: () => {
-      queryClient.invalidateQueries('users')
+      queryClient.invalidateQueries('companies')
     }
   })
 
   const { register, formState, handleSubmit } = useForm({
-    resolver: yupResolver(createUserFormSchema)
+    resolver: yupResolver(createCompanyFormSchema)
   });
 
   const { errors } = formState;
 
-  const handleCreateUser:SubmitHandler<CreateUserFormData> = async(values) => {
-    await createUser.mutateAsync(values)
+  const handleCreateCompany:SubmitHandler<CreateCompanyFormData> = async(values) => {
+    await createCompany.mutateAsync(values)
 
-    router.push('/users')
+    router.push('/companies')
   };
 
   return (
@@ -75,9 +72,9 @@ export default function CreateUser() {
           borderRadius={8} 
           p={["6","8"]}
           bg="gray.800"
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleCreateCompany)}
         >
-          <Heading size="lg" fontWeight="normal">Criar Usuário</Heading>
+          <Heading size="lg" fontWeight="normal">Criar Empresa</Heading>
 
           <Divider borderColor="gray.700" my="6"/>
 
@@ -90,6 +87,15 @@ export default function CreateUser() {
                 error={errors.name}
                 {...register('name')}
               />
+              <Input
+                name="cnpj"
+                type="cnpj"
+                label="CNPJ"
+                error={errors.cnpj}
+                {...register('cnpj')}
+              />
+            </SimpleGrid>
+            <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
               <Input
                 name="email"
                 type="email"
@@ -118,7 +124,7 @@ export default function CreateUser() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="/users" passHref>
+              <Link href="/companies" passHref>
                 <Button as="a" colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
 
