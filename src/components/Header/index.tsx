@@ -5,7 +5,6 @@ import { useSidebarDrawer } from "../../contexts/SidebarDrawerContext";
 import { Logo } from "./Logo";
 import { NotificationsNav } from "./NotificationsNav";
 import { Profile } from "./Profile";
-import { SearchBox } from "./SearchBox";
 
 export function Header() {
   const { onOpen } = useSidebarDrawer()
@@ -42,8 +41,6 @@ export function Header() {
 
       <Logo />
 
-      { isWideVersion && <SearchBox /> }
-    
       <Flex align="center" ml="auto">
         <NotificationsNav />
         <Profile showProfileData={isWideVersion} />
