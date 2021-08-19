@@ -5,6 +5,7 @@ type Company = {
   id: string;
   name: string;
   email: string;
+  cnpj: string;
   created_at: string;
   updated_at: string;
 }
