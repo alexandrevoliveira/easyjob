@@ -30,7 +30,7 @@ export default function Home() {
 
           {/* aqui irei redirecionar para a página de usuários, por enquanto que
           não criamos a página de candidatos */}
-          <Link href="/users">
+          <Link href="/candidates">
             <ChakraLink display="flex" _hover={{ color: 'purple.500' }}>
               <Icon as={GoPerson} fontSize="24" alignSelf="center" />
               <Text ml="4" fontWeight="medium" fontSize="24">Candidato</Text>
