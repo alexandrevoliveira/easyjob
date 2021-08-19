@@ -29,6 +29,7 @@ export const getCompanies = async(page: number): Promise<GetCompaniesResponse> =
       id: company.id,
       name: company.name,
       email: company.email,
+      cnpj: company.cnpj,
       created_at: new Date(company.created_at).toLocaleDateString('pt-BR', {
         day: "2-digit",
         month: "long",

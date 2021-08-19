@@ -48,7 +48,7 @@ export default function CompanyList() {
 
             {isWideVersion && (
               <SearchBox
-                name={"company"}
+                name="company"
                 label="empresa"
                 onChange={(event) => {
                   // setFilter(event.target.name)
