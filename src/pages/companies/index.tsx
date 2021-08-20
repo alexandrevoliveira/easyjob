@@ -100,7 +100,9 @@ export default function CompanyList() {
                         <Td>
                           <Box>
                             <Link color="purple.400" onMouseEnter={() => handlePrefetchCompany(company.id)}>
-                              <Text fontWeight="bold">{company.name}</Text>
+                              <NextLink href={`/companies/${company.id}`}>
+                                <Text fontWeight="bold">{company.name}</Text>
+                              </NextLink>
                             </Link>
                             <Text fontSize="sm" color="gray.300">{company.email}</Text>
                           </Box>
