@@ -17,7 +17,7 @@ import { queryClient } from "../../services/queryClient";
 
 interface CreateCandidateFormData {
   name: string;
-  cnpj: string;
+  cpf: string;
   email: string;
   password: string;
   password_confirmation: string;
@@ -25,7 +25,7 @@ interface CreateCandidateFormData {
 
 const createCandidateFormSchema = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
-  cnpj: yup.string().required("CPF é um campo obrigatório para candidato").length(14),
+  cpf: yup.string().required("CPF é um campo obrigatório para candidato").length(11),
   email: yup.string().required("Email obrigatório").email("E-mail inválido"),
   password: yup.string().required("Senha obrigatória")
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
