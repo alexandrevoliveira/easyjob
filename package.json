@@ -31,6 +31,7 @@
     "eslint": "7.30.0",
     "eslint-config-next": "11.0.1",
     "faker": "^5.5.3",
+    "git-commit-msg-linter": "^3.2.8",
     "miragejs": "^0.1.41",
     "typescript": "4.3.5"
   }
