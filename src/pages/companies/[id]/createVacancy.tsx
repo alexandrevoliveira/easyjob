@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, HStack, Input as ChakraInput, SimpleGrid, VStack } from "@chakra-ui/react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -66,7 +66,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
   const handleCreateVacancy:SubmitHandler<CreateVacancyFormData> = async(values) => {
     await createVacancy.mutateAsync(values)
 
-    router.push('/vacancies')
+    router.push(`/companies/${company.id}`)
   };
 
   return (
@@ -84,7 +84,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
           bg="gray.800"
           onSubmit={handleSubmit(handleCreateVacancy)}
         >
-          <Heading size="lg" fontWeight="normal">Criar Empresa</Heading>
+          <Heading size="lg" fontWeight="normal">Criar Vaga</Heading>
 
           <Divider borderColor="gray.700" my="6"/>
 
@@ -113,7 +113,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
                 error={errors.area}
                 {...register('area')}
               />
-              <input type="hidden" name="company_id" value={company.id} {...register('company_id')}/>
+              <ChakraInput type="hidden" name="company_id" value={company.id} {...register('company_id')}/>
             </SimpleGrid>
             <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
               <Input
