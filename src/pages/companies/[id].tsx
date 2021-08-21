@@ -52,25 +52,31 @@ export default function UserProfile({ company }: CompanyProps) {
           </Flex>
 
           <VStack spacing={8} align="center" justifySelf="left">
-            <HStack spacing={4} align="center" justify="space-between">
+            <HStack spacing={32}>
+              <HStack spacing={4} align="center" justify="space-between">
                 <Text fontSize={22}>Nome:</Text>
-                <Text fontSize={20}>{company.name}</Text>
+                <Text fontSize={20} textTransform="capitalize">{company.name}</Text>
+              </HStack>
+              <HStack spacing={4} align="center" justify="space-between">
+                  <Text fontSize={22}>E-mail:</Text>
+                  <Text fontSize={20}>{company?.email}</Text>
+              </HStack>
             </HStack>
-            <HStack spacing={4} align="center" justify="space-between">
-                <Text fontSize={22}>E-mail:</Text>
-                <Text fontSize={20}>{company?.email}</Text>
+            <HStack>
+              <HStack spacing={4} align="center" justify="space-between">
+                  <Text fontSize={22}>CNPJ:</Text>
+                  <Text fontSize={20}>{company?.cnpj}</Text>
+              </HStack>
             </HStack>
-            <HStack spacing={4} align="center" justify="space-between">
-                <Text fontSize={22}>CNPJ:</Text>
-                <Text fontSize={20}>{company?.cnpj}</Text>
-            </HStack>
-            <HStack spacing={4} align="center" justify="space-between">
-                <Text fontSize={22}>Vaga criada em:</Text>
-                <Text fontSize={20}>{company?.created_at}</Text>
-            </HStack>
-            <HStack spacing={4} align="center" justify="space-between">
-                <Text fontSize={22}>Vaga atualizada em:</Text>
-                <Text fontSize={20}>{company?.updated_at}</Text>
+            <HStack spacing={32}>
+              <HStack spacing={4} align="center" justify="space-between">
+                  <Text fontSize={22}>Vaga criada em:</Text>
+                  <Text fontSize={20}>{company?.created_at}</Text>
+              </HStack>
+              <HStack spacing={4} align="center" justify="space-between">
+                  <Text fontSize={22}>Vaga atualizada em:</Text>
+                  <Text fontSize={20}>{company?.updated_at}</Text>
+              </HStack>
             </HStack>
           </VStack>
         </Box>
@@ -81,11 +87,25 @@ export default function UserProfile({ company }: CompanyProps) {
 
 export const getServerSideProps:GetServerSideProps = async ({ params }) => {
 
-  const company = await api.get(`/companies/${params.id}`)
+  let company = await api.get(`/companies/${params.id}`)
+
+  company = {
+    ...company.data,
+    created_at: new Date(company.data.created_at).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }),
+    updated_at: new Date(company.data.updated_at).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }) 
+  }
 
   return {
     props: {
-      company: company.data
+      company
     }
   }
 }
