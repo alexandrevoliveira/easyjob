@@ -4,21 +4,21 @@ import { Sidebar } from "../../components/Sidebar";
 import { api } from "../../services/api";
 
 import NextLink from "next/link"
-import { RiAddLine } from "react-icons/ri";
+import { BiClipboard } from "react-icons/bi"
 import { GetServerSideProps } from "next";
 
-interface CompanyProps {
-  company: {
+interface CandidateProps {
+  candidate: {
     id: string;
     name: string;
     email: string;
-    cnpj: string;
+    cpf: string;
     created_at: string;
     updated_at: string;
   }
 }
 
-export default function CompanyProfile({ company }: CompanyProps) {
+export default function CandidateProfile({ candidate }: CandidateProps) {
   return (
     <Box>
       <Header />
@@ -38,15 +38,15 @@ export default function CompanyProfile({ company }: CompanyProps) {
               Informações
             </Heading>
             
-            <NextLink href={`/companies/${company.id}/createVacancy`} passHref>
+            <NextLink href={`/candidates/${candidate.id}/vacancies`} passHref>
               <Button
                 as="a"
                 size="sm"
                 fontSize="sm"
                 colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                leftIcon={<Icon as={BiClipboard} fontSize="20" />}
               >
-                Criar vaga
+                Vagas aplicadas
               </Button>
             </NextLink>
           </Flex>
@@ -55,27 +55,27 @@ export default function CompanyProfile({ company }: CompanyProps) {
             <HStack spacing={32}>
               <HStack spacing={2} align="center" justify="space-between">
                 <Text fontSize={22}>Nome:</Text>
-                <Text fontSize={20} textTransform="capitalize">{company.name}</Text>
+                <Text fontSize={20} textTransform="capitalize">{candidate.name}</Text>
               </HStack>
               <HStack spacing={2} align="center" justify="space-between">
                   <Text fontSize={22}>E-mail:</Text>
-                  <Text fontSize={20}>{company?.email}</Text>
+                  <Text fontSize={20}>{candidate?.email}</Text>
               </HStack>
             </HStack>
             <HStack>
               <HStack spacing={2} align="center" justify="space-between">
-                  <Text fontSize={22}>CNPJ:</Text>
-                  <Text fontSize={20}>{company?.cnpj}</Text>
+                  <Text fontSize={22}>CPF:</Text>
+                  <Text fontSize={20}>{candidate?.cpf}</Text>
               </HStack>
             </HStack>
             <HStack spacing={16}>
               <HStack spacing={2} align="center" justify="space-between">
-                  <Text fontSize={22}>Empresa criada em:</Text>
-                  <Text fontSize={20}>{company?.created_at}</Text>
+                  <Text fontSize={22}>Candidato criado em:</Text>
+                  <Text fontSize={20}>{candidate?.created_at}</Text>
               </HStack>
               <HStack spacing={2} align="center" justify="space-between">
-                  <Text fontSize={22}>Empresa atualizada em:</Text>
-                  <Text fontSize={20}>{company?.updated_at}</Text>
+                  <Text fontSize={22}>Candidato atualizado em:</Text>
+                  <Text fontSize={20}>{candidate?.updated_at}</Text>
               </HStack>
             </HStack>
           </VStack>
@@ -87,16 +87,16 @@ export default function CompanyProfile({ company }: CompanyProps) {
 
 export const getServerSideProps:GetServerSideProps = async ({ params }) => {
 
-  let company = await api.get(`/companies/${params.id}`)
+  let candidate = await api.get(`/candidates/${params.id}`)
 
-  company = {
-    ...company.data,
-    created_at: new Date(company.data.created_at).toLocaleDateString("pt-BR", {
+  candidate = {
+    ...candidate.data,
+    created_at: new Date(candidate.data.created_at).toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     }),
-    updated_at: new Date(company.data.updated_at).toLocaleDateString("pt-BR", {
+    updated_at: new Date(candidate.data.updated_at).toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -105,7 +105,7 @@ export const getServerSideProps:GetServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      company
+      candidate
     }
   }
 }

@@ -1,5 +1,5 @@
 import NextLink from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Thead, Th, Tr, Text, useBreakpointValue, Link } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
@@ -101,7 +101,9 @@ export default function CandidateList() {
                         <Td>
                           <Box>
                             <Link color="purple.400" onMouseEnter={() => handlePrefetchCandidate(candidate.id)}>
-                              <Text fontWeight="bold">{candidate.name}</Text>
+                              <NextLink href={`/candidates/${candidate.id}`}>
+                                <Text fontWeight="bold">{candidate.name}</Text>
+                              </NextLink>
                             </Link>
                             <Text fontSize="sm" color="gray.300">{candidate.email}</Text>
                           </Box>
