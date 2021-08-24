@@ -51,7 +51,7 @@ export default function UserProfile({ company }: CompanyProps) {
             </NextLink>
           </Flex>
 
-          <VStack spacing={8} align="center" justifySelf="left">
+          <VStack spacing={8} align="left" justifySelf="left">
             <HStack spacing={32}>
               <HStack spacing={4} align="center" justify="space-between">
                 <Text fontSize={22}>Nome:</Text>
@@ -68,7 +68,7 @@ export default function UserProfile({ company }: CompanyProps) {
                   <Text fontSize={20}>{company?.cnpj}</Text>
               </HStack>
             </HStack>
-            <HStack spacing={32}>
+            <HStack spacing={20}>
               <HStack spacing={4} align="center" justify="space-between">
                   <Text fontSize={22}>Vaga criada em:</Text>
                   <Text fontSize={20}>{company?.created_at}</Text>
