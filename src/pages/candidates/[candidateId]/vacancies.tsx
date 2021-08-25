@@ -1,25 +1,37 @@
 import NextLink from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Thead, Th, Tr, Text, useBreakpointValue, Link } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
-import { Header } from "../../components/Header";
-import { Pagination } from "../../components/Pagination";
-import { Sidebar } from "../../components/Sidebar";
-import { SearchBox } from "../../components/SearchBox"
+import { Header } from "../../../components/Header";
+import { Pagination } from "../../../components/Pagination";
+import { Sidebar } from "../../../components/Sidebar";
+import { SearchBox } from "../../../components/SearchBox"
 
-import { useCandidates } from "../../services/hooks/useCandidates";
-import { queryClient } from "../../services/queryClient";
-import { api } from "../../services/api";
+import { useVacancies } from "../../../services/hooks/useVacancies";
+import { queryClient } from "../../../services/queryClient";
+import { api } from "../../../services/api";
+import { GetServerSideProps } from "next";
 
-export default function CandidateList() {
+interface VacancyListProps {
+  candidate: {
+    id: string;
+    name: string;
+    email: string;
+    cpf: string;
+    created_at: string;
+    updated_at: string;
+   }
+}
+
+export default function VacancyList({ candidate }: VacancyListProps) {
   const [page, setPage] = useState(1);
   
-  const { data, isLoading, isFetching, error } = useCandidates(page);  
+  const { data, isLoading, isFetching, error } = useVacancies(page);  
   
-  async function handlePrefetchCandidate(candidateId: string) {
-    await queryClient.prefetchQuery(['candidate', candidateId], async() => {
-      const response = await api.get(`candidates/${candidateId}`)
+  async function handlePrefetchVacancy(vacancyId: string) {
+    await queryClient.prefetchQuery(['vacancy', vacancyId], async() => {
+      const response = await api.get(`vacancies/${vacancyId}`)
 
       return response.data
     }, {
@@ -42,30 +54,18 @@ export default function CandidateList() {
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
-              Candidatos
+              Vagas
               { !isLoading && isFetching && <Spinner size="sm" color="gray.500" ml="4"/>}
             </Heading>
 
             {isWideVersion && (
               <SearchBox
-                name="candidate"
-                label="candidato"
+                name="vacancy"
+                label="vaga"
                 onChange={(event) => {
                   // setFilter(event.target.name)
                 }}/>
             )}
-            
-            <NextLink href="/candidates/create" passHref>
-              <Button
-                as="a"
-                size="sm"
-                fontSize="sm"
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-              >
-                Criar novo
-              </Button>
-            </NextLink>
           </Flex>
         
           {isLoading ? (
@@ -74,7 +74,7 @@ export default function CandidateList() {
             </Flex>
           ) : error ? (
             <Flex justify="center">
-              <Text>Falha ao obter dados dos candidatos</Text>
+              <Text>Falha ao obter dados das vagas</Text>
             </Flex>
           ) : (
             <>
@@ -84,33 +84,40 @@ export default function CandidateList() {
                     <Th px={["4", "4", "6"]} color="gray.300" width="8">
                       <Checkbox colorScheme="pink" />
                     </Th>
-                    <Th>Candidato</Th>
-                    <Th>Habilidades</Th>
+                    <Th>Vaga</Th>
+                    <Th>Tipo</Th>
+                    <Th>Área</Th>
+                    <Th>Requisitos</Th>
+                    <Th>Salário</Th>
+                    <Th>Qnt.</Th>
                     { isWideVersion && <Th>Data de cadastro</Th>}
                     { isWideVersion && <Th>Ultima atualização</Th>}
                     <Th w="8"></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.candidates.map(candidate => {
+                  {data.vacancies.map(vacancy => {
                     return (
-                      <Tr key={candidate.id}>
+                      <Tr key={vacancy.id}>
                         <Td px={["4", "4", "6"]}>
                           <Checkbox colorScheme="pink" />
                         </Td>
                         <Td>
                           <Box>
-                            <Link color="purple.400" onMouseEnter={() => handlePrefetchCandidate(candidate.id)}>
-                              <NextLink href={`/candidates/${candidate.id}`}>
-                                <Text fontWeight="bold">{candidate.name}</Text>
+                            <Link color="purple.400" onMouseEnter={() => handlePrefetchVacancy(vacancy.id)}>
+                              <NextLink href={`/candidates/${candidate.id}/vacancies/${vacancy.id}`}>
+                                <Text fontWeight="bold">{vacancy.role}</Text>
                               </NextLink>
                             </Link>
-                            <Text fontSize="sm" color="gray.300">{candidate.email}</Text>
                           </Box>
                         </Td>
-                        <Td>{candidate.skills}</Td>
-                        { isWideVersion && <Td>{candidate.created_at}</Td>}
-                        { isWideVersion && <Td>{candidate.updated_at}</Td>}
+                        <Td>{vacancy.type}</Td>
+                        <Td>{vacancy.area}</Td>
+                        {vacancy.requirements ? <Td>{vacancy.requirements}</Td> : <Td>---</Td>}
+                        <Td>{vacancy.salary}</Td>
+                        <Td>{vacancy.quantity}</Td>
+                        { isWideVersion && <Td>{vacancy.created_at}</Td>}
+                        { isWideVersion && <Td>{vacancy.updated_at}</Td>}
                         <Td>
                           <Button
                             as="a"
@@ -140,4 +147,28 @@ export default function CandidateList() {
       </Flex>
     </Box>
   );
+}
+
+export const getServerSideProps:GetServerSideProps = async ({ params }) => {
+  let candidate = await api.get(`/candidates/${params.candidateId}`)
+
+  candidate = {
+    ...candidate.data,
+    created_at: new Date(candidate.data.created_at).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }),
+    updated_at: new Date(candidate.data.updated_at).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }) 
+  }
+
+  return {
+    props: {
+      candidate
+    }
+  }
 }

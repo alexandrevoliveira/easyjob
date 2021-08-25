@@ -66,7 +66,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
   const handleCreateVacancy:SubmitHandler<CreateVacancyFormData> = async(values) => {
     await createVacancy.mutateAsync(values)
 
-    router.push(`/companies/${company.id}`)
+    router.push(`/vacancies`)
   };
 
   return (
@@ -156,7 +156,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
 
 export const getServerSideProps:GetServerSideProps = async ({ params }) => {
 
-  const company = await api.get(`/companies/${params.id}`)
+  const company = await api.get(`/companies/${params.companyId}`)
 
   return {
     props: {
