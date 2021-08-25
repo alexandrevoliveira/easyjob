@@ -66,7 +66,7 @@ export default function CreateVacancy({ company }: CompanyProps) {
   const handleCreateVacancy:SubmitHandler<CreateVacancyFormData> = async(values) => {
     await createVacancy.mutateAsync(values)
 
-    router.push(`/companies/${company.id}`)
+    router.push(`/vacancies`)
   };
 
   return (
