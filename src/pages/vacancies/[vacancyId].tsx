@@ -27,7 +27,7 @@ export default function VacancyProfile({ vacancy }: VacancyProps) {
     <Box>
       <Header />
 
-      <Flex w="100%" my="6" mx="auto" px="6">
+      <Flex w="100%" my="6" mx="auto" px="6" maxWidth={1480}>
         <Sidebar />
 
         <Box
@@ -111,7 +111,7 @@ export default function VacancyProfile({ vacancy }: VacancyProps) {
 
 export const getServerSideProps:GetServerSideProps = async ({ params }) => {
 
-  let vacancy = await api.get(`/vacancies/${params.id}`)
+  let vacancy = await api.get(`/vacancies/${params.vacancyId}`)
 
   let company = await api.get(`/companies/${vacancy.data.company_id}`)
 
